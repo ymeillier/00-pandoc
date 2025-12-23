@@ -207,13 +207,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "pandoc.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of pandoc"
+              "title": "Outline"
             }
           }
         ],
@@ -237,7 +236,7 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "4c32237452ea81b3",
+  "active": "994d3c936a2bfbc0",
   "lastOpenFiles": [
     "pandoc.md",
     "Template.md",

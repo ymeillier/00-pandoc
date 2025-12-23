@@ -1,5 +1,12 @@
 Local Repo:
-/Users/meillier/Documents/02-CE Role/01-Encyclopedia/00-pandoc
+```bash 
+cd /Users/meillier/Documents/02-CE\ Role/01-Encyclopedia/00-pandoc
+```
+
+
+git repo:
+https://github.com/ymeillier/00-pandoc
+
 
 This is the workflow i used to convert my humongous .docx documents to markdown 
 
