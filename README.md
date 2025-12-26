@@ -157,6 +157,48 @@ such as in this case here
 
 ## Post-Processing.
 
+### Sections to Notes
+we do not want one large markdown.
+Instead we extract sections of our word doc, now in markdown, into their own notes. This helps save a heading level too as the note name is that first heading we used to have in MS Word.
+
+so from:
+![](./assets/README/file-20251226160247060.png)
+to 
+![](./assets/README/file-20251226160344483.png)
+
+### Shift Section HEaders
+Because section that used to be heading 1 in word are now notes, the ms word heading 2 level should now be heading 1 and so will the sub headings.
+
+we can see that in AI-Tech, ``\[AIArchitecture`` is still heading 2 when it should be heading 1. 
+
+For that we use heading shifter plugin.
+Highlight the entire document/note and then use `Shift+TAB` to shift level all headings.
+
+and now it is heading 1
+![](./assets/README/file-20251226160639612.png)
+
+### \[section-XXX\]
+
+pandoc processes sections of the word doc in Sections and for them added headers:
+
+For example
+![](./assets/README/file-20251226155823740.png)
+we use the regex find/replace to replace any reference of:
+```
+[section-xxx]
+```
+with an empty line.
+
+So we would use:
+
+```
+^##\s\[section-\d+\]\s*$
+```
+
+![](./assets/README/file-20251226160036098.png)
+
+### Image references: XML to markdown
+
 Pandoc will creae links to hteimages using xml like:
 ```
 <img src="./media/image2.png" style="width:6.5in;height:3.68333in" />
@@ -194,3 +236,9 @@ After the find/replace operation in rednered viw the image takes the full with o
 and uses the format:
 ![](./assets/README/file-20251226154351116.png)
 
+## Custom Attachment Location: Collect Attachments
+this is to fix where images are saved in our vault under assets vs pandoc's media folder 
+
+
+IF oyu run into an error when running the plugin check the chrome console tab (⌥ + ⌘ + I) (alt/option + Command + i)
+![](./assets/README/file-20251226161747046.png)
