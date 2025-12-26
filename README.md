@@ -127,31 +127,70 @@ pandoc "YourDocument.docx" \
 ## Word Pre-processing
 My word document sometimes skipped heading levels by mistake. For example a header at level 4 with subheaders at level 6.
 before converting the word document to markdown, review the word document in outline view, displaying level up to lvl 7 and scroll to validate no subsections skip a level
-![](./assets/pandoc/file-20251223161048948.png)
+![](file-20251226112247793.png)
 
 For example 'Anatomy of an AI Server/Cloud (Neo CLoud)' is a level 3 header
-![](./assets/pandoc/file-20251223161200258.png)
+![](file-20251226112247801.png)
 
 but the subsection directly underneath is a level 5:
-![](./assets/pandoc/file-20251223161239683.png)
+![](file-20251226112247805.png)
 highlight the sections to be moved and adjust left:
-![](./assets/pandoc/file-20251223161335917.png)
+![](file-20251226112247809.png)
 
 we have some true level 7 headers here for example
-![](./assets/pandoc/file-20251223161620458.png)
+![](file-20251226112247814.png)
 however we should be able to shift that down one level when create dedicated md files for the lvl1 sections of the word documents. 
 IT is not a good practice to have one large md file as at some point its content will not be able to pushed to github when it reaches too large of a size. 
 
 
 I also made sure to udate hte formatting of sections lvl7 and above to a red hue so that they are easily identfiable in outline view
-![](./assets/pandoc/file-20251223161915430.png)
+![](file-20251226112247819.png)
 
 and now in outline view:
-![](./assets/pandoc/file-20251223161958677.png)
+![](file-20251226112247836.png)
 i also make lvl 6 green so that if we ever see blue jumping to red or orange, a heading level is being skipped
-![](./assets/pandoc/file-20251223162124677.png)
+![](file-20251226112247840.png)
 such as in this case here 
-![](./assets/pandoc/file-20251223162144637.png)
+![](file-20251226112247843.png)
 
 
+
+## Post-Processing.
+
+Pandoc will creae links to hteimages using xml like:
+```
+<img src="./media/image2.png" style="width:6.5in;height:3.68333in" />
+```
+
+
+![](./assets/README/file-20251226154205643.png)
+
+
+It forces the images to be of a fixed size inthe document and those are too small.
+
+![](./assets/README/file-20251226154246775.png)
+
+
+
+WE installed the Regex Find/Replace plugin to change all image reference from xml to markdown:
+
+![](./assets/README/file-20251226154018578.png)
+
+from 
+```
+<img src="\./media/(.*?)" style=".*?" />
+```
+
+to:
+```
+![[$1]]
+```
+
+![](./assets/README/file-20251226154108034.png)
+
+
+After the find/replace operation in rednered viw the image takes the full with of the document
+![](./assets/README/file-20251226154338439.png)
+and uses the format:
+![](./assets/README/file-20251226154351116.png)
 
