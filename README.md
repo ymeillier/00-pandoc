@@ -48,7 +48,7 @@ This version includes every parent level in the title, separated by pipes.
 - **Result:** `###### Level 1 | Level 2 | ... | Level 7`
     
 
-Lua
+#### Lua-base2.lua
 
 ```
 local heading_stack = {}
@@ -69,6 +69,55 @@ function Header(el)
 end
 ```
 
+#### Lua-base3.lua
+Version that extract images to ./assets/note-name/ instead of ./media/
+```bash
+local heading_stack = {}
+
+-- Helper to get the output filename (without extension)
+local function get_filename()
+  local out = pandoc.state.output_file
+  if out then
+    return out:match("(.+)%..+") or out
+  end
+  return "note"
+end
+
+function Header(el)
+  heading_stack[el.level] = pandoc.utils.stringify(el.content)
+  for i = el.level + 1, 10 do heading_stack[i] = nil end
+
+  if el.level > 6 then
+    local prefix_parts = {}
+    for i = 6, el.level - 1 do
+      if heading_stack[i] and heading_stack[i] ~= "" then
+        table.insert(prefix_parts, heading_stack[i])
+      end
+    end
+
+    if #prefix_parts == 0 then
+      for i = 5, 1, -1 do
+        if heading_stack[i] and heading_stack[i] ~= "" then
+          table.insert(prefix_parts, heading_stack[i])
+          break 
+        end
+      end
+    end
+    
+    local new_title = (#prefix_parts > 0 and table.concat(prefix_parts, " | ") .. " | " or "") .. pandoc.utils.stringify(el.content)
+    return pandoc.Header(6, pandoc.Str(new_title), pandoc.Attr())
+  end
+  return el
+end
+
+function Image(el)
+  -- Rewrites path from 'media/image1.png' to 'assets/FILENAME/image1.png'
+  local filename = get_filename()
+  local img_name = el.src:match("([^/]+)$")
+  el.src = "assets/" .. filename .. "/" .. img_name
+  return el
+end
+```
 ### Version 2: Smart Breadcrumb (Cleaner Sidebar)
 
 This version only includes the immediate parent and a "..." indicator to keep the 'Quiet Outline' sidebar from becoming too cluttered.
@@ -93,6 +142,43 @@ function Header(el)
     local short_title = "... " .. parent_title .. " | " .. pandoc.utils.stringify(el.content)
     return pandoc.Header(6, pandoc.Str(short_title), el.attr)
   end
+  return el
+end
+```
+
+Version that extract images to ./assets/note-name/ instead of ./media/
+```bash
+local heading_stack = {}
+
+local function get_filename()
+  local out = pandoc.state.output_file
+  if out then return out:match("(.+)%..+") or out end
+  return "note"
+end
+
+function Header(el)
+  heading_stack[el.level] = pandoc.utils.stringify(el.content)
+  for i = el.level + 1, 10 do heading_stack[i] = nil end
+
+  if el.level > 6 then
+    local parent_title = ""
+    for i = el.level - 1, 6, -1 do
+      if heading_stack[i] and heading_stack[i] ~= "" then
+        parent_title = heading_stack[i]
+        break
+      end
+    end
+    
+    local new_title = (parent_title ~= "" and "... " .. parent_title .. " | " or "") .. pandoc.utils.stringify(el.content)
+    return pandoc.Header(6, pandoc.Str(new_title), pandoc.Attr())
+  end
+  return el
+end
+
+function Image(el)
+  local filename = get_filename()
+  local img_name = el.src:match("([^/]+)$")
+  el.src = "assets/" .. filename .. "/" .. img_name
   return el
 end
 ```
